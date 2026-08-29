@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+title: "Prévision du chômage américain par six modèles (travail UQAM ECO8086, 2021)"
+message: "Si vous utilisez ce dépôt, citez-le comme suit."
+type: software
+authors:
+  - family-names: Vaudescal
+    given-names: Guillaume
+  - family-names: Tousignant
+    given-names: Philippe
+repository-code: "https://github.com/Guilou001/uqam-prevision-facteurs"
+license: MIT
+version: 1.0.0
+date-released: "2026-08-29"
