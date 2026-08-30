@@ -8,6 +8,8 @@ retéléchargées par script, ligne de commande, tests, CI, et chaque figure ré
 ![python](https://img.shields.io/badge/python-3.12-blue)
 ![licence](https://img.shields.io/badge/code-MIT-green)
 
+Le même contenu en PDF : [rapport/rapport.pdf](rapport/rapport.pdf).
+
 **Résultat en une phrase.** La réplication retrouve le travail de 2021 de près. L'autorégressif
 direct d'ordre 4 à l'horizon 4 donne **0,841** contre 0,840 alors, et le **VAR à l'horizon 1 reste le
 meilleur des six modèles**, à 0,798 du repère contre 0,822. Le travail laissait au temps une question,

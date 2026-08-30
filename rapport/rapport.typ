@@ -39,6 +39,8 @@
 
 Travail pratique d'équipe remis le 31 octobre 2021 à Philippe Goulet Coulombe, dans le cours _Applications de modèles économiques_ (ECO8086, UQAM), rendu ici reproductible : données retéléchargées par script, ligne de commande, tests, CI, et chaque figure régénérable d'une commande.
 
+Le même contenu en PDF : #link("rapport/rapport.pdf")[rapport/rapport.pdf].
+
 *Résultat en une phrase.* La réplication retrouve le travail de 2021 de près. L'autorégressif direct d'ordre 4 à l'horizon 4 donne *0,841* contre 0,840 alors, et le *VAR à l'horizon 1 reste le meilleur des six modèles*, à 0,798 du repère contre 0,822. Le travail laissait au temps une question, faut-il retirer la Covid des données pour prévoir la suite. Cinq ans plus tard, la réponse est *oui pour les trois modèles rejoués*, et l'écart va jusqu'à la moitié de l'erreur pour l'ARMA (0,020 contre 0,041).
 
 _English summary._ Six models forecast the monthly change in the US unemployment rate over twelve horizons, each re-estimated 732 times in a pseudo-out-of-sample exercise on 1961-2021 data. The replication matches the 2021 coursework closely: the direct AR(4) at horizon 4 scores 0,841 against 0,840 then, and the VAR at horizon 1 remains the best of the six, 0,798 against 0,822, both relative to an AR(1) benchmark. The work ended on an open question, whether to drop the Covid window when forecasting ahead. The realised unemployment rate now answers it: dropping it was better for all three models re-run, halving the error for the ARMA.
