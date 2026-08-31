@@ -1,7 +1,7 @@
 """Les six modèles du travail, plus le repère auquel tout est comparé.
 
-La prévision est dite **directe** : pour prévoir à l'horizon h, on ne prédit pas h fois de suite un
-modèle à un mois, on estime un modèle qui relie directement la valeur du mois t à celles des mois
+La prévision est dite **directe**. Pour prévoir à l'horizon h, on ne prédit pas h fois de suite un
+modèle à un mois. On estime un modèle qui relie directement la valeur du mois t à celles des mois
 t - h et antérieurs. Le carnet de 2021 l'obtient en ne gardant que les retards h + 1 et suivants, puis
 en prédisant le mois qui suit la fin de l'échantillon. Ce portage garde ce montage.
 
@@ -94,7 +94,7 @@ def facteurs(y: pd.Series, d: Decoupage, h: int, i: int, X: pd.DataFrame = None,
     """Deux composantes principales de FRED-MD, plus un retard du chômage.
 
     Les composantes sont recalculées à chaque fenêtre sur le passé disponible plus le mois à prévoir,
-    ce que le carnet de 2021 fait aussi : la dernière ligne des composantes sert de valeur exogène
+    ce que le carnet de 2021 fait aussi. La dernière ligne des composantes sert de valeur exogène
     connue au moment de la prévision.
     """
     fenetre = y.iloc[: d.debut_test + i]

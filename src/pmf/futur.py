@@ -8,7 +8,7 @@ Ce module rejoue les prévisions de septembre 2021 à septembre 2022, avec et sa
 Trois des six modèles sont rejoués, ceux qui ne demandent aucune prévision auxiliaire : la moyenne
 historique, l'autorégressif direct d'ordre 4 et l'ARMA. Les trois autres, à facteurs, ARDL et VAR,
 auraient besoin qu'on prévoie d'abord leurs propres variables explicatives, ce que le carnet de 2021
-faisait par des ARMA auxiliaires ; ils ne sont pas prolongés ici, et c'est déclaré.
+faisait par des ARMA auxiliaires. Ils ne sont pas prolongés ici, et c'est déclaré.
 """
 
 from __future__ import annotations

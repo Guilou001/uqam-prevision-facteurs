@@ -60,6 +60,19 @@ def fig_erreurs(relatif: pd.DataFrame, dest: Path) -> Path:
     return dest
 
 
+def titre_serie(serie: pd.Series) -> str:
+    """Le titre de la figure de la série, déduit de ses seules valeurs.
+
+    Le mot « point » s'accorde sur la valeur de pointe : le pluriel commence à deux, comme pour
+    toute unité en français.
+    """
+    pointe = serie.abs().idxmax()
+    valeur = serie.loc[pointe]
+    pluriel = "s" if abs(valeur) >= 2 else ""
+    return (f"Chômage américain, {serie.index[0]:%Y-%m} à {serie.index[-1]:%Y-%m} : "
+            f"la plus forte variation vaut {_fr(valeur, 1)} point{pluriel} en {pointe:%Y-%m}")
+
+
 def fig_serie(serie: pd.Series, covid: tuple[str, str], dest: Path) -> Path:
     """La variable prédite, et la fenêtre que le travail met de côté."""
     fr = use_style()
@@ -71,10 +84,7 @@ def fig_serie(serie: pd.Series, covid: tuple[str, str], dest: Path) -> Path:
     ax.set_ylabel("Variation mensuelle du taux de chômage\n(points de pourcentage)", fontsize=9.5)
     ax.yaxis.set_major_formatter(fr)
     ax.legend(fontsize=9)
-    pointe = serie.abs().idxmax()
-    ax.set_title(f"Chômage américain, {serie.index[0]:%Y-%m} à {serie.index[-1]:%Y-%m} : "
-                 f"la plus forte variation vaut {_fr(serie.loc[pointe], 1)} point en "
-                 f"{pointe:%Y-%m}", fontsize=10.5)
+    ax.set_title(titre_serie(serie), fontsize=10.5)
     fig.savefig(dest)
     plt.close(fig)
     return dest

@@ -3,7 +3,7 @@
 Le dépôt recopie le travail d'origine mot pour mot. Ce test lit les blocs cités du README, lit le PDF
 joint, et vérifie que chaque bloc s'y retrouve. La comparaison retire tous les espaces des deux côtés :
 le PDF de 2021 vient d'un traitement de texte à justification, dont l'extraction coupe des mots en
-deux (« l a première », « entr e ») ; ces coupures sont un artefact de mise en page, pas des mots.
+deux (« l a première », « entr e »). Ces coupures sont un artefact de mise en page, pas des mots.
 L'apostrophe typographique est ramenée à l'apostrophe droite pour la même raison. La suite de lettres,
 elle, doit être identique.
 """

@@ -1,7 +1,7 @@
 # Prévoir le chômage américain : six modèles, douze horizons, et le pari que 2021 laissait ouvert
 
 Travail pratique d'équipe remis le 31 octobre 2021 à Philippe Goulet Coulombe, dans le cours
-*Applications de modèles économiques* (ECO8086, UQAM), rendu ici reproductible : données
+*Applications de modèles économiques* (ECO8086, UQAM). Il est rendu ici reproductible : données
 retéléchargées par script, ligne de commande, tests, CI, et chaque figure régénérable d'une commande.
 
 [![ci](https://github.com/Guilou001/uqam-prevision-facteurs/actions/workflows/ci.yml/badge.svg)](https://github.com/Guilou001/uqam-prevision-facteurs/actions/workflows/ci.yml)
@@ -173,10 +173,11 @@ de la série, ce qui explique pourquoi la question de le retirer se pose.
    recomposant la prévision à la main depuis les quatre valeurs retardées.
 4. **Répéter 732 fois par modèle**, 12 horizons fois 61 fenêtres.
 5. **Estimer les six modèles** : la moyenne de tout le passé ; l'autorégressif direct d'ordre 4 ; le
-   modèle à facteurs, qui résume les 119 séries de FRED-MD en deux composantes principales, les
-   directions qui expliquent le plus de leur variation commune ; l'ARMA (1, 2) ; l'ARDL, qui ajoute
-   les demandes d'assurance chômage et l'emploi salarié ; le VAR, qui traite le chômage et les
-   demandes d'assurance chômage comme deux variables qui s'expliquent mutuellement.
+   modèle à facteurs ; l'ARMA (1, 2) ; l'ARDL ; le VAR. Le modèle à facteurs résume les 119 séries
+   de FRED-MD en deux composantes principales, les directions qui expliquent le plus de leur
+   variation commune. L'ARDL ajoute les demandes d'assurance chômage et l'emploi salarié. Le VAR
+   traite le chômage et les demandes d'assurance chômage comme deux variables qui s'expliquent
+   mutuellement.
 6. **Rapporter chaque erreur à celle du repère**, l'autorégressif d'ordre 1 à l'horizon 1.
 
 ## 5. Ce que le portage a changé
@@ -186,7 +187,6 @@ de la série, ce qui explique pourquoi la question de le retirer se pose.
 | positions de ligne écrites en clair (`155`, `803`, `864`) | dates (`1961-01`, `2015-01`, `2020-02`) | une série qui s'allonge décale toutes les positions ; les dates ne bougent pas |
 | colonnes de FRED-MD désignées par leur rang (`iloc[:, 30:32]`) | désignées par leur nom (`CLAIMSx`, `PAYEMS`) | le rang d'une colonne dépend du millésime |
 | deux fichiers déposés à la main | `pmf fetch` | le dépôt doit se rejouer ailleurs |
-| `AutoReg(..., old_names=False)` | l'argument est retiré | il n'existe plus dans statsmodels |
 
 ## 6. Les résultats
 
@@ -216,8 +216,9 @@ n'aide pas à prévoir cette série-là. Ensuite, l'ARDL est le plus régulier, 
 horizons et à 0,864 en moyenne. Le VAR, lui, alterne entre le meilleur score du tableau à l'horizon 1
 et un score au-dessus du repère à l'horizon 4. Puis, la moyenne historique tient une ligne
 presque plate autour de 0,931 : ne rien modéliser du tout coûte 7 % de moins que le repère. Enfin,
-l'écart entre le meilleur et le pire modèle vaut 0,21, ce qui est petit au regard de 61 mois de test.
-Le travail de 2021 le disait déjà, en proposant des tests statistiques comme extension.
+l'écart entre le meilleur et le pire modèle vaut 0,143 en moyenne, ce qui est petit au regard de
+61 mois de test. Le travail de 2021 le disait déjà, en proposant des tests statistiques comme
+extension.
 
 ![Les erreurs par horizon](results/figures/erreurs_par_horizon.png)
 
@@ -242,12 +243,14 @@ millième près, ce qui est le meilleur résultat possible pour une réplication
 révisées et un millésime de FRED-MD différent. Le deuxième est que le VAR reste le meilleur modèle du
 lot dans les deux versions, et qu'il s'améliore même de 0,024. Le troisième est que le modèle à
 facteurs est celui qui bouge le plus, ce qui était prévisible. C'est le seul dont les entrées
-dépendent entièrement du millésime substitué, et il passe de 0,938 au niveau exact du repère.
+dépendent entièrement du millésime substitué, et il passe de 0,938 à 0,9998, soit le niveau du
+repère.
 
 Le classement de tête change en partie. Le travail de 2021 retenait « le VAR h1, le AR(4) h4 et le
 ARDL h1 ». En 2026 le trio devient le VAR à l'horizon 1 (0,798), l'ARDL à l'horizon 6 (0,827) et
-l'ARDL à l'horizon 4 (0,837), l'autorégressif direct tombant quatrième à 0,841. Les quatre
-premiers tiennent dans 0,043, soit moins que l'écart entre deux horizons voisins d'un même modèle.
+l'ARDL à l'horizon 4 (0,837), l'ARDL à l'horizon 1 arrivant quatrième à 0,841 et l'autorégressif
+direct à l'horizon 4 cinquième au même arrondi. Les quatre premiers tiennent dans 0,043, soit moins
+que l'écart entre deux horizons voisins d'un même modèle.
 
 ### Le pari de 2021, et sa réponse
 
@@ -263,11 +266,11 @@ réalisé de septembre 2021 à septembre 2022 est maintenant connu, et il tranch
 
 Comment lire ce tableau, en trois constats. Le premier répond à la question de 2021 : retirer la
 fenêtre de la Covid était le bon choix, pour les trois modèles rejoués, et l'intuition du travail
-était donc juste. Le deuxième est que le gain croît avec la mémoire du modèle. Il est nul pour la moyenne historique,
-qui dilue les dix-sept mois dans sept cents, et de moitié pour l'ARMA, dont les paramètres pèsent
-surtout les mois récents. Le troisième est plus embarrassant pour les six
-modèles à la fois. Leur erreur moyenne est positive dans les six cas, de +0,04 à +0,13 point : aucun
-n'a vu que le chômage continuerait de baisser aussi vite en 2022.
+était donc juste. Le deuxième est que le gain croît quand le modèle pèse davantage les mois
+récents. Il vaut 2 % pour la moyenne historique, qui dilue les dix-sept mois dans sept cents, et
+50 % pour l'ARMA, dont les paramètres tiennent surtout aux dernières observations. Le troisième est
+plus embarrassant, pour les six variantes à la fois. Leur erreur moyenne est positive dans les six cas,
+de +0,04 à +0,13 point : aucune n'a vu que le chômage continuerait de baisser aussi vite en 2022.
 
 Trois modèles sur six sont rejoués, ceux qui ne demandent aucune prévision auxiliaire. Le modèle à
 facteurs, l'ARDL et le VAR auraient besoin qu'on prévoie d'abord leurs propres variables explicatives,
@@ -279,14 +282,15 @@ Comment lire cette figure : un cadre par modèle, la courbe noire étant le chô
 les deux autres les prévisions faites en 2021 avec et sans la fenêtre de la Covid. Les prévisions sont
 presque plates quand le réalisé oscille entre -0,4 et +0,1 point. C'est la faiblesse que le travail de
 2021 signalait lui-même, « les prévisions ont une variance beaucoup plus petite que les valeurs
-réelles ». La courbe verte, sans la Covid, passe sous la jaune dans les trois cadres, et c'est ce
-décalage vers le bas qui la rapproche du réalisé.
+réelles ». La courbe verte, sans la Covid, passe sous la jaune sur 38 des 39 mois dessinés, et c'est
+ce décalage vers le bas qui la rapproche du réalisé. Dans le cadre de la moyenne historique les deux
+se superposent, l'écart n'y valant que 0,0033 point.
 
 ## 7. Reproduire
 
 ```bash
 uv sync --locked --all-extras
-uv run pytest             # 11 tests fermés, sans réseau
+uv run pytest             # 12 tests fermés, sans réseau
 uv run pmf fetch          # deux fichiers sources, environ 0,7 Mo
 uv run pmf bases          # la fenêtre et le découpage
 uv run pmf lab            # les six modèles, 732 estimations chacun
@@ -294,7 +298,7 @@ uv run pmf futur          # les prévisions de 2021, contre le réalisé
 uv run pmf figures        # les trois figures
 ```
 
-Durées mesurées sur un processeur Apple M5 Pro : **90 secondes** pour `pmf lab`, dont 62 pour l'ARMA,
+Durées mesurées sur un processeur Apple M5 Pro : **89 secondes** pour `pmf lab`, dont 62 pour l'ARMA,
 qui est le seul modèle à réestimer une vraisemblance complète à chacune des 732 fenêtres. Les autres
 commandes prennent quelques secondes.
 
@@ -318,7 +322,8 @@ Cours ECO8086, *Applications de modèles économiques*, donné par Philippe Goul
 portage sur statsmodels 0.14, le téléchargement par script, les tests, la CI et le prolongement
 jusqu'en 2022 datent de 2026.
 
-Code sous licence MIT.
+Données : Federal Reserve Bank of St. Louis, série UNRATE et base FRED-MD de McCracken et Ng,
+téléchargées par script et jamais commitées. Code sous licence MIT.
 
 ## 10. Références
 

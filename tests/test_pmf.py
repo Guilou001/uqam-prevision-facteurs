@@ -118,3 +118,22 @@ def test_les_donnees_savent_retirer_la_fenetre_de_la_covid():
     assert len(serie) == 728
     assert len(donnees.sans_covid) == 711             # 17 mois de février 2020 à juin 2021
     assert not ((donnees.sans_covid.index >= COVID[0]) & (donnees.sans_covid.index <= COVID[1])).any()
+
+
+def test_le_titre_de_la_figure_accorde_le_mot_point():
+    """Le titre se déduit des données, et le mot « point » s'accorde sur la valeur de pointe.
+
+    Le défaut que ce test attrape : un pluriel écrit au singulier derrière une valeur supérieure à
+    deux, comme les 10,4 points d'avril 2020 que la figure du dépôt affiche.
+    """
+    from pmf.figures import titre_serie
+
+    index = pd.date_range("2020-01-01", periods=3, freq="MS")
+    assert titre_serie(pd.Series([0.1, 10.4, -0.2], index=index)).endswith(
+        "la plus forte variation vaut 10,4 points en 2020-02")
+    assert titre_serie(pd.Series([0.1, 1.4, -0.2], index=index)).endswith(
+        "la plus forte variation vaut 1,4 point en 2020-02")
+    assert titre_serie(pd.Series([0.1, -3.0, -0.2], index=index)).endswith(
+        "la plus forte variation vaut -3,0 points en 2020-02")
+    assert titre_serie(pd.Series([0.1, 1.4, -0.2], index=index)).startswith(
+        "Chômage américain, 2020-01 à 2020-03 :")

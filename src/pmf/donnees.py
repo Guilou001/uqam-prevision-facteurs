@@ -5,11 +5,11 @@ se retéléchargent, le premier tel quel, le second dans son millésime courant 
 celui de septembre 2021.
 
 Une précision s'impose sur la variable prédite. Le texte de 2021 parle de « la première différence du
-taux de chômage » et sa colonne s'appelle `UNRATE_PCH`, deux noms qui ne désignent pas la même chose :
-la différence première retranche le taux du mois précédent, la variation en pourcentage le divise. Les
+taux de chômage » et sa colonne s'appelle `UNRATE_PCH`, deux noms qui ne désignent pas la même chose.
+La différence première retranche le taux du mois précédent, la variation en pourcentage le divise. Les
 chiffres du travail tranchent. Sa moyenne historique de -0,001925 sur 1961-2021 est celle de la
-différence première, la variation en pourcentage donnant un nombre vingt fois plus grand. C'est donc
-la différence première que ce dépôt télécharge, par la transformation `chg` de FRED.
+différence première, la variation en pourcentage donnant un nombre positif, +0,175 sur le millésime
+courant. Ce dépôt télécharge donc la différence première, par la transformation `chg` de FRED.
 """
 
 from __future__ import annotations
