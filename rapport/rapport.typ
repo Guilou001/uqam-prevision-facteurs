@@ -77,17 +77,27 @@ Nos données d'entrainements sont de 1961-01 à 2014-12 inclusivement, et nos do
 
 #quote(block: true)[Comme nous avons vu en cours, la moyenne historique rend quand même des résultats impressionnants bien qu'elle ne capture pas la variance de notre variable. En effet, elle minimise mieux les erreurs en moyenne que notre benchmark. On peut noter qu'en moyenne la moyenne historique à une MSE 10 point de pourcentage inférieur au benchmark.
 
+\[…\]
+
 Le modèle autorégressif est une modélisation d'une série temporelle en fonction d'une constante et de ses valeurs passées. Afin de choisir le bon ordre de notre modèle autorégressif, nous avons comparé les modèles d'ordre 1 à 12 et gardé celui avec le meilleur BIC. Ainsi le meilleur modèle est un AR(4).
 
 \[…\]
 
 Le modèle optimal utilise 2 composantes, les deux lags de la première composante et les 5 lags de la deuxième composante respectivement, ainsi qu'un lag de la série elle-même.
 
+\[…\]
+
 On peut noter qu'en moyenne la performance du modèle à facteur est meilleur que le AR(1) benchmark. Toutefois, il est moins performant que les deux précédents modèles, à savoir la moyenne historique et l'autorégressif direct. Enfin, le meilleur horizon est h1 (0.938159).
+
+\[…\]
 
 On remarque que le modèle ARMA (1,2) performe relativement moins bien que les précédents modèles présentés. Cependant il reste sensiblement meilleur que le AR(1) benchmark. Enfin le meilleur horizon est h4 (0.901306).
 
+\[…\]
+
 On peut noter que le modèle ARDL performe relativement bien comparés aux précédents modèles présentés. En effet, en moyenne chacun de ses horizons est plus performant que le benchmark. Enfin le meilleur horizon est h1 (0.867007).
+
+\[…\]
 
 On peut observer que le modèle VAR performe relativement bien comparés aux précédents modèles présentés. En effet, en moyenne chacun de ses horizons est plus performant que le benchmark. Également on peut préciser l'excellente performance de l'horizon h1 (0.821966) comparativement aux autres modèles.]
 
@@ -293,11 +303,11 @@ Tous les chiffres viennent de #raw("results/tables/"), et les figures se régén
     [0,933],
 )
 
-Comment lire ce tableau, en quatre constats. D'abord, cinq des six modèles battent le repère en moyenne, et le sixième, le modèle à facteurs, fait pire : résumer 119 séries en deux composantes n'aide pas à prévoir cette série-là. Ensuite, l'ARDL est le plus bas de façon constante : il tient le meilleur score du tableau à neuf des douze horizons, et 0,864 en moyenne. Le VAR, lui, alterne entre le meilleur score du tableau à l'horizon 1 et un score au-dessus du repère à l'horizon 4. Puis, la moyenne historique tient la ligne la plus plate des sept, autour de 0,931 : ne rien modéliser du tout coûte 7 % de moins que le repère. Enfin, l'écart entre le meilleur et le pire modèle vaut 0,143 en moyenne, ce qui est petit au regard de 61 mois de test. Le travail de 2021 le disait déjà, en proposant des tests statistiques comme extension.
+Comment lire ce tableau, en quatre constats. D'abord, cinq des six modèles battent le repère en moyenne, et le sixième, le modèle à facteurs, fait pire : résumer 119 séries en deux composantes n'aide pas à prévoir cette série-là. Ensuite, l'ARDL est le plus bas de façon constante : il tient le meilleur score du tableau à neuf des douze horizons, et 0,864 en moyenne. Le VAR, lui, tient le meilleur score du tableau à l'horizon 1 et passe au-dessus du repère à l'horizon 4. Sa colonne ne se compare pas d'un horizon à l'autre, pour la raison donnée dans les limites. Puis, la moyenne historique tient la ligne la plus plate des sept, autour de 0,931 : ne rien modéliser du tout coûte 7 % de moins que le repère. Enfin, l'écart entre le meilleur et le pire modèle vaut 0,143 en moyenne, ce qui est petit au regard de 61 mois de test. Le travail de 2021 le disait déjà, en proposant des tests statistiques comme extension.
 
 #figure(image("../results/figures/erreurs_par_horizon.png", width: 100%), caption: [Les erreurs par horizon])
 
-Comment lire cette figure : six courbes, une par modèle, le repère n'ayant pas la sienne. L'horizon est en abscisse, l'erreur rapportée au repère en ordonnée. La ligne pointillée à 1 est le repère lui-même, l'autorégressif d'ordre 1 à l'horizon 1. La ligne bleue presque horizontale est la moyenne historique, qui ne dépend pas de l'horizon. Les courbes qui zigzaguent sont celles des modèles estimés, et leur zigzag mesure surtout le bruit de l'exercice, pas une propriété des horizons.
+Comment lire cette figure : six courbes, une par modèle, le repère n'ayant pas la sienne. L'horizon est en abscisse, l'erreur rapportée au repère en ordonnée. La ligne pointillée à 1 est le repère lui-même, l'autorégressif d'ordre 1 à l'horizon 1. La ligne bleue presque horizontale est la moyenne historique, qui ne dépend pas de l'horizon. Les courbes qui zigzaguent sont celles des modèles estimés, et leur zigzag mesure surtout le bruit de l'exercice, pas une propriété des horizons. La courbe du VAR fait exception : son décalage d'horizon, décrit dans les limites, y contribue aussi.
 
 === Ce que 2021 rapporte, et ce que 2026 retrouve
 
@@ -402,6 +412,8 @@ Durées mesurées sur un processeur Apple M5 Pro : *89 secondes* pour #raw("pmf 
     [reconnu ; le travail de 2021 le proposait déjà comme extension, et les quatre premiers couples tiennent dans 0,043],
     [La moyenne historique de l'horizon h s'arrête h mois plus tôt que les autres modèles],
     [reconnu ; c'est un raccourci du carnet de 2021, conservé pour rester fidèle, et il avantage à peine la moyenne aux grands horizons],
+    [Le VAR n'est pas direct : à l'horizon H il prévoit le mois t + H - 1, et son erreur est mesurée contre le mois t],
+    [mesuré ; le carnet de 2021 apparie de la même façon, donc la réplication est fidèle, et c'est la comparaison d'un horizon à l'autre qui perd son sens pour cette colonne],
     [Trois des six modèles seulement sont prolongés jusqu'en 2022],
     [déclaré ; les trois autres exigeraient de prévoir leurs propres variables explicatives],
     [Un seul pays, une seule variable, un seul découpage],
