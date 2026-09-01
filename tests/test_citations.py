@@ -6,6 +6,9 @@ le PDF de 2021 vient d'un traitement de texte à justification, dont l'extractio
 deux (« l a première », « entr e »). Ces coupures sont un artefact de mise en page, pas des mots.
 L'apostrophe typographique est ramenée à l'apostrophe droite pour la même raison. La suite de lettres,
 elle, doit être identique.
+
+Une ligne de citation qui ne porte que « […] » marque une coupe dans le texte d'origine. Elle sépare
+deux blocs et n'est comparée à rien, puisqu'elle ne cite rien.
 """
 
 import re
@@ -20,6 +23,8 @@ PDF = RACINE / "rapport" / "rapport_original_2021.pdf"
 # l'apostrophe typographique du traitement de texte et l'apostrophe droite désignent le même mot
 APOSTROPHES = {"\u2019": "'", "\u2018": "'", "\u201c": '"', "\u201d": '"'}
 
+COUPURE = "[\u2026]"          # la marque d'une coupe : « […] » seul sur sa ligne
+
 
 def _sans_espaces(texte: str) -> str:
     for avant, apres in APOSTROPHES.items():
@@ -32,7 +37,7 @@ def _blocs_cites(readme: str) -> list[str]:
     for ligne in readme.splitlines():
         if ligne.startswith(">"):
             contenu = ligne[1:].strip()
-            if contenu:
+            if contenu and contenu != COUPURE:
                 courant.append(contenu)
                 continue
         if courant:
@@ -53,6 +58,15 @@ def texte_du_pdf() -> str:
 
 def test_le_pdf_du_travail_est_bien_joint():
     assert PDF.exists(), "le rapport de 2021 doit rester dans le dépôt : les citations s'y vérifient"
+
+
+def test_une_coupe_est_toujours_marquee_sur_sa_propre_ligne():
+    """La marque de coupe ne se glisse jamais dans une phrase citée : elle occupe sa ligne seule."""
+    lignes = (RACINE / "README.md").read_text().splitlines()
+    marques = [ligne for ligne in lignes if COUPURE in ligne]
+    assert marques, "les coupes entre blocs cités doivent être marquées"
+    for ligne in marques:
+        assert ligne.strip() == f"> {COUPURE}", f"marque de coupe mal isolée : {ligne!r}"
 
 
 def test_chaque_bloc_cite_se_retrouve_mot_pour_mot(texte_du_pdf):

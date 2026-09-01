@@ -14,16 +14,16 @@ Le même contenu en PDF : [rapport/rapport.pdf](rapport/rapport.pdf).
 direct d'ordre 4 à l'horizon 4 donne **0,841** contre 0,840 alors, et le **VAR à l'horizon 1 reste le
 meilleur des six modèles**, à 0,798 du repère contre 0,822. Le travail laissait au temps une question,
 faut-il retirer la Covid des données pour prévoir la suite. Cinq ans plus tard, la réponse est **oui
-pour les trois modèles rejoués**, et l'écart va jusqu'à la moitié de l'erreur pour l'ARMA (0,020
-contre 0,041).
+pour les trois modèles rejoués**, et l'écart va jusqu'à la moitié de l'erreur quadratique moyenne
+pour l'ARMA (0,020 contre 0,041).
 
 *English summary.* Six models forecast the monthly change in the US unemployment rate over twelve
 horizons, each re-estimated 732 times in a pseudo-out-of-sample exercise on 1961-2021 data. The
-replication matches the 2021 coursework closely: the direct AR(4) at horizon 4 scores 0,841 against
-0,840 then, and the VAR at horizon 1 remains the best of the six, 0,798 against 0,822, both relative
+replication matches the 2021 coursework closely: the direct AR(4) at horizon 4 scores 0.841 against
+0.840 then, and the VAR at horizon 1 remains the best of the six, 0.798 against 0.822, both relative
 to an AR(1) benchmark. The work ended on an open question, whether to drop the Covid window when
 forecasting ahead. The realised unemployment rate now answers it: dropping it was better for all
-three models re-run, halving the error for the ARMA.
+three models re-run, halving the mean squared error for the ARMA.
 
 ## 1. La question posée
 
@@ -44,6 +44,8 @@ dire pire.
 
 > Dans notre travail de prévision d'une variable macroéconomique, nous avons décidé de prévoir le
 > chômage des États-Unis.
+>
+> […]
 >
 > D'autre part, ces données sont mensuelles, et disponible de février 1948 à Août 2021. Bien que
 > l'échantillon soit disponible depuis les années 40, nous avons décidé de garder seulement les
@@ -81,6 +83,8 @@ dire pire.
 > comparé les modèles d'ordre 1 à 12 et gardé celui avec le meilleur BIC. Ainsi le meilleur modèle est
 > un AR(4).
 >
+> […]
+>
 > Le modèle optimal utilise 2 composantes, les deux lags de la première composante et les 5 lags de la
 > deuxième composante respectivement, ainsi qu'un lag de la série elle-même.
 >
@@ -108,6 +112,8 @@ dire pire.
 > h1, le AR(4) h4 et le ARDL h1. De surcroit, tous les modèles semblent bien minimiser la somme des
 > erreurs mais, ne capture pas adéquatement notre variance de notre variable d'intérêt.
 >
+> […]
+>
 > On voit rapidement que les prévisions ont une variance beaucoup plus petite que les valeurs réelles.
 > Également, celui qui capture le mieux la variance est le modèle VAR, comme on peut le voir avec les
 > deux graphiques ci-dessous.
@@ -119,6 +125,8 @@ dire pire.
 > présentés dans la section précédente ont été réestimés deux fois, la première avec les données de
 > 1961-01 à 2021-08 et la deuxième avec cette même période mais en retirant a période d'extrême
 > volatilité dû à la pandémie de covid-19. (2020-02 à 2021-06).
+>
+> […]
 >
 > Ce constat amène une question importante pour la prévision. Que devrions-nous faire des données
 > résultats de black swan pour la prévision ? Il semble logique d'exclure ces valeurs aberrantes pour
@@ -157,8 +165,9 @@ révisées, **-0,002060**, en est à un dix-millième.
 
 Comment lire cette figure : chaque point est la variation du taux de chômage d'un mois à l'autre, en
 points de pourcentage. La bande colorée est la fenêtre de février 2020 à juin 2021 que le travail met
-de côté dans sa seconde variante. Le pic d'avril 2020 vaut à lui seul dix fois l'amplitude habituelle
-de la série, ce qui explique pourquoi la question de le retirer se pose.
+de côté dans sa seconde variante. Le pic d'avril 2020, 10,4 points, vaut à lui seul 11,6 fois le plus
+fort mouvement mensuel observé hors de cette fenêtre, 0,9 point en janvier 1975. C'est ce qui explique
+pourquoi la question de le retirer se pose.
 
 ## 4. La méthode, pas à pas
 
@@ -167,10 +176,14 @@ de la série, ce qui explique pourquoi la question de le retirer se pose.
    temps.
 2. **Couper l'échantillon** : 1961-01 à 2014-12 pour l'apprentissage, soit 648 mois, puis 61 fenêtres
    de test qui commencent en 2015-01. À chaque fenêtre, un mois de plus entre dans l'apprentissage.
-3. **Prévoir de façon directe.** Pour l'horizon h, le modèle ne garde que les retards h + 1 et
-   suivants, puis prédit le mois qui suit la fin de sa fenêtre. Un modèle d'horizon 4 ne voit donc
-   jamais les trois mois qui précèdent immédiatement ce qu'il prédit, et un test le vérifie en
-   recomposant la prévision à la main depuis les quatre valeurs retardées.
+3. **Prévoir de façon directe.** Pour l'horizon h, les deux autorégressifs ne gardent que les retards
+   h et suivants, puis prédisent le mois qui suit la fin de leur fenêtre. Celui d'horizon 4 ne voit
+   donc jamais les trois mois qui précèdent immédiatement ce qu'il prédit, et un test le vérifie en
+   recomposant la prévision à la main depuis les quatre valeurs retardées. Les quatre autres modèles
+   décalent moins. L'ARMA ne décale que son retard autorégressif, et garde les résidus des deux mois
+   précédents. L'ARDL et le modèle à facteurs décalent de même leur retard du chômage, mais gardent
+   leurs séries explicatives sans décalage. Le VAR n'est pas direct du tout : il est prolongé de
+   h mois à partir des dernières observations.
 4. **Répéter 732 fois par modèle**, 12 horizons fois 61 fenêtres.
 5. **Estimer les six modèles** : la moyenne de tout le passé ; l'autorégressif direct d'ordre 4 ; le
    modèle à facteurs ; l'ARMA (1, 2) ; l'ARDL ; le VAR. Le modèle à facteurs résume les 119 séries
@@ -212,18 +225,19 @@ Tous les chiffres viennent de `results/tables/`, et les figures se régénèrent
 
 Comment lire ce tableau, en quatre constats. D'abord, cinq des six modèles battent le repère en
 moyenne, et le sixième, le modèle à facteurs, fait pire : résumer 119 séries en deux composantes
-n'aide pas à prévoir cette série-là. Ensuite, l'ARDL est le plus régulier, sous le repère aux douze
-horizons et à 0,864 en moyenne. Le VAR, lui, alterne entre le meilleur score du tableau à l'horizon 1
-et un score au-dessus du repère à l'horizon 4. Puis, la moyenne historique tient une ligne
-presque plate autour de 0,931 : ne rien modéliser du tout coûte 7 % de moins que le repère. Enfin,
-l'écart entre le meilleur et le pire modèle vaut 0,143 en moyenne, ce qui est petit au regard de
-61 mois de test. Le travail de 2021 le disait déjà, en proposant des tests statistiques comme
+n'aide pas à prévoir cette série-là. Ensuite, l'ARDL est le plus bas de façon constante : il tient le
+meilleur score du tableau à neuf des douze horizons, et 0,864 en moyenne. Le VAR, lui, alterne entre
+le meilleur score du tableau à l'horizon 1 et un score au-dessus du repère à l'horizon 4. Puis, la
+moyenne historique tient la ligne la plus plate des sept, autour de 0,931 : ne rien modéliser du tout
+coûte 7 % de moins que le repère. Enfin, l'écart entre le meilleur et le pire modèle vaut 0,143 en
+moyenne, ce qui est petit au regard de 61 mois de test. Le travail de 2021 le disait déjà, en proposant des tests statistiques comme
 extension.
 
 ![Les erreurs par horizon](results/figures/erreurs_par_horizon.png)
 
-Comment lire cette figure : une courbe par modèle, l'horizon en abscisse, l'erreur rapportée au repère
-en ordonnée. La ligne pointillée à 1 est le repère lui-même. La ligne bleue presque horizontale est la
+Comment lire cette figure : six courbes, une par modèle, le repère n'ayant pas la sienne.
+L'horizon est en abscisse, l'erreur rapportée au repère en ordonnée. La ligne pointillée à 1 est le
+repère lui-même, l'autorégressif d'ordre 1 à l'horizon 1. La ligne bleue presque horizontale est la
 moyenne historique, qui ne dépend pas de l'horizon. Les courbes qui zigzaguent sont celles des modèles
 estimés, et leur zigzag mesure surtout le bruit de l'exercice, pas une propriété des horizons.
 
@@ -250,7 +264,7 @@ Le classement de tête change en partie. Le travail de 2021 retenait « le VAR h
 ARDL h1 ». En 2026 le trio devient le VAR à l'horizon 1 (0,798), l'ARDL à l'horizon 6 (0,827) et
 l'ARDL à l'horizon 4 (0,837), l'ARDL à l'horizon 1 arrivant quatrième à 0,841 et l'autorégressif
 direct à l'horizon 4 cinquième au même arrondi. Les quatre premiers tiennent dans 0,043, soit moins
-que l'écart entre deux horizons voisins d'un même modèle.
+que le saut du VAR entre les horizons 1 et 2, qui vaut 0,209 à lui seul.
 
 ### Le pari de 2021, et sa réponse
 
@@ -258,7 +272,7 @@ Le travail se terminait sur une question et un délai : faut-il retirer la Covid
 faudra attendre quelques mois pour voir la meilleure approche ». Les mois ont passé. Le chômage
 réalisé de septembre 2021 à septembre 2022 est maintenant connu, et il tranche.
 
-| Modèle | Avec la Covid | Sans la Covid | Ce que le retrait fait gagner |
+| Modèle | Erreur quadratique moyenne, avec la Covid | Sans la Covid | Ce que le retrait fait gagner |
 |---|---:|---:|---:|
 | Moyenne historique | 0,0380 | 0,0372 | 2 % |
 | Autorégressif direct d'ordre 4 | 0,0430 | 0,0314 | 27 % |
@@ -268,7 +282,8 @@ Comment lire ce tableau, en trois constats. Le premier répond à la question de
 fenêtre de la Covid était le bon choix, pour les trois modèles rejoués, et l'intuition du travail
 était donc juste. Le deuxième est que le gain croît quand le modèle pèse davantage les mois
 récents. Il vaut 2 % pour la moyenne historique, qui dilue les dix-sept mois dans sept cents, et
-50 % pour l'ARMA, dont les paramètres tiennent surtout aux dernières observations. Le troisième est
+50 % pour l'ARMA, dont les paramètres tiennent surtout aux dernières observations. Ces pourcentages
+portent sur l'erreur au carré ; ramenés à sa racine, le gain de l'ARMA vaut 29,6 %. Le troisième est
 plus embarrassant, pour les six variantes à la fois. Leur erreur moyenne est positive dans les six cas,
 de +0,04 à +0,13 point : aucune n'a vu que le chômage continuerait de baisser aussi vite en 2022.
 
@@ -290,7 +305,7 @@ se superposent, l'écart n'y valant que 0,0033 point.
 
 ```bash
 uv sync --locked --all-extras
-uv run pytest             # 12 tests fermés, sans réseau
+uv run pytest             # 13 tests fermés, sans réseau
 uv run pmf fetch          # deux fichiers sources, environ 0,7 Mo
 uv run pmf bases          # la fenêtre et le découpage
 uv run pmf lab            # les six modèles, 732 estimations chacun

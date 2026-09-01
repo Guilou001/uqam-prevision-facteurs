@@ -1,9 +1,13 @@
 """Les six modèles du travail, plus le repère auquel tout est comparé.
 
-La prévision est dite **directe**. Pour prévoir à l'horizon h, on ne prédit pas h fois de suite un
+La prévision est dite **directe**. Pour prévoir à l'horizon H, on ne prédit pas H fois de suite un
 modèle à un mois. On estime un modèle qui relie directement la valeur du mois t à celles des mois
-t - h et antérieurs. Le carnet de 2021 l'obtient en ne gardant que les retards h + 1 et suivants, puis
-en prédisant le mois qui suit la fin de l'échantillon. Ce portage garde ce montage.
+t - H et antérieurs. Le carnet de 2021 l'obtient en ne gardant que les retards H et suivants, puis en
+prédisant le mois qui suit la fin de l'échantillon. Ce portage garde ce montage.
+
+Il garde aussi l'indice de boucle du carnet. Le paramètre `h` des fonctions ci-dessous part de zéro,
+si bien que l'horizon H vaut h + 1. Le premier retard, qui vaut H, s'écrit donc `h + 1` dans le code,
+et c'est cette écriture-là que reprennent les docstrings des fonctions.
 
 Chaque modèle est réestimé à chaque fenêtre, 12 horizons fois 61 fenêtres, soit 732 estimations par
 modèle. La fenêtre s'allonge d'un mois à chaque tour : le modèle voit toujours tout le passé
