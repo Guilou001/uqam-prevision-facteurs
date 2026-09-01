@@ -5,6 +5,11 @@ modèle à un mois. On estime un modèle qui relie directement la valeur du mois
 t - H et antérieurs. Le carnet de 2021 l'obtient en ne gardant que les retards H et suivants, puis en
 prédisant le mois qui suit la fin de l'échantillon. Ce portage garde ce montage.
 
+Le vecteur autorégressif fait exception, et c'est le carnet de 2021 qui en décide. Lui prolonge sa
+trajectoire de H mois et retient le dernier, donc il prévoit le mois t + H - 1 alors que l'erreur est
+mesurée contre le mois t. Sa colonne ne se compare donc pas d'un horizon à l'autre. Le défaut est
+déclaré au tableau des limites du README et non corrigé, puisque ce dépôt réplique le carnet.
+
 Il garde aussi l'indice de boucle du carnet. Le paramètre `h` des fonctions ci-dessous part de zéro,
 si bien que l'horizon H vaut h + 1. Le premier retard, qui vaut H, s'écrit donc `h + 1` dans le code,
 et c'est cette écriture-là que reprennent les docstrings des fonctions.
@@ -118,7 +123,11 @@ def ardl(y: pd.Series, d: Decoupage, h: int, i: int, X: pd.DataFrame = None, **_
 
 
 def var(y: pd.Series, d: Decoupage, h: int, i: int, X: pd.DataFrame = None, **_) -> float:
-    """Un vecteur autorégressif à deux variables, prolongé de h + 1 mois."""
+    """Un vecteur autorégressif à deux variables, prolongé de h + 1 mois.
+
+    Le mois rendu est donc le dernier de ce prolongement, et non celui contre lequel l'erreur est
+    mesurée. Voir la réserve en tête de module.
+    """
     fenetre = pd.concat([y.iloc[: d.debut_test + i],
                          X[EXOGENE_VAR].iloc[: d.debut_test + i]], axis=1)
     ajuste = VAR(fenetre).fit(maxlags=MAXLAGS_VAR, ic="bic")

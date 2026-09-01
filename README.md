@@ -237,7 +237,7 @@ Comment lire ce tableau, en quatre constats. D'abord, cinq des six modèles batt
 moyenne, et le sixième, le modèle à facteurs, fait pire : résumer 119 séries en deux composantes
 n'aide pas à prévoir cette série-là. Ensuite, l'ARDL est le plus bas de façon constante : il tient le
 meilleur score du tableau à neuf des douze horizons, et 0,864 en moyenne. Le VAR, lui, tient le
-meilleur score du tableau à l'horizon 1 et passe au-dessus du repère à l'horizon 4. Sa colonne ne se
+meilleur score du tableau à l'horizon 1 et passe au-dessus du repère aux horizons 2 et 4. Sa colonne ne se
 compare pas d'un horizon à l'autre, pour la raison donnée dans les limites. Puis, la
 moyenne historique tient la ligne la plus plate des sept, autour de 0,931 : ne rien modéliser du tout
 coûte 7 % de moins que le repère. Enfin, l'écart entre le meilleur et le pire modèle vaut 0,143 en
@@ -276,7 +276,7 @@ Le classement de tête change en partie. Le travail de 2021 retenait « le VAR h
 ARDL h1 ». En 2026 le trio devient le VAR à l'horizon 1 (0,798), l'ARDL à l'horizon 6 (0,827) et
 l'ARDL à l'horizon 4 (0,837), l'ARDL à l'horizon 1 arrivant quatrième à 0,841 et l'autorégressif
 direct à l'horizon 4 cinquième au même arrondi. Les quatre premiers tiennent dans 0,043, soit moins
-que le saut du VAR entre les horizons 1 et 2, qui vaut 0,209 à lui seul.
+d'un tiers de l'écart entre le meilleur et le pire modèle en moyenne, qui vaut 0,143.
 
 ### Le pari de 2021, et sa réponse
 
